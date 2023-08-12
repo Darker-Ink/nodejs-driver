@@ -3,6 +3,9 @@
 A modern, [feature-rich](#features) and highly tunable Node.js client library for Apache Cassandra and [DSE][dse] using
 exclusively Cassandra's binary protocol and Cassandra Query Language.
 
+> "A modern"
+modern my ass, code is terrible pain in the fucking ass to update, you don't even have github issues open
+
 ## Installation
 
 ```bash

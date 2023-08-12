@@ -24,6 +24,12 @@ export namespace mapping {
 
     getPropertyName(columnName: string): string;
 
+    objectToArray(obj: any): any[];
+
+    objectToFixedCasing(obj: any): any;
+
+    objectToTableCasing(obj: any): any;
+
     newObjectInstance(): any;
   }
 
@@ -32,6 +38,12 @@ export namespace mapping {
 
     getPropertyName(columnName: string): string;
 
+    objectToArray(obj: any): any[];
+
+    objectToFixedCasing(obj: any): any;
+
+    objectToTableCasing(obj: any): any;
+
     newObjectInstance(): any;
   }
 
@@ -39,6 +51,26 @@ export namespace mapping {
     getColumnName(propName: string): string;
 
     getPropertyName(columnName: string): string;
+
+    objectToArray(obj: any): any[];
+
+    objectToFixedCasing(obj: any): any;
+
+    objectToTableCasing(obj: any): any;
+
+    newObjectInstance(): any;
+  }
+
+  class UnderscoreCqlToPascalCaseMappings implements TableMappings {
+    getColumnName(propName: string): string;
+
+    getPropertyName(columnName: string): string;
+
+    objectToArray(obj: any): any[];
+
+    objectToFixedCasing(obj: any): any;
+
+    objectToTableCasing(obj: any): any;
 
     newObjectInstance(): any;
   }
