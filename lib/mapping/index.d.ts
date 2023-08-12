@@ -138,17 +138,17 @@ export namespace mapping {
     name: string;
     batching: ModelBatchMapper;
 
-    get(doc: T, docInfo?: { fields?: string[] }, executionOptions?: string | MappingExecutionOptions): Promise<null | T>;
+    get(doc: Partial<T>, docInfo?: { fields?: string[] }, executionOptions?: string | MappingExecutionOptions): Promise<null | T>;
 
-    find(doc: T, docInfo?: FindDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    find(doc: Partial<T>, docInfo?: FindDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
     findAll(docInfo?: FindDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
     insert(doc: T, docInfo?: InsertDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
-    update(doc: T, docInfo?: UpdateDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    update(doc: Partial<T>, docInfo?: UpdateDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
-    remove(doc: T, docInfo?: RemoveDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    remove(doc: Partial<T>, docInfo?: RemoveDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
     mapWithQuery(
       query: string,
