@@ -48,6 +48,10 @@ export namespace mapping {
   }
 
   class UnderscoreCqlToCamelCaseMappings implements TableMappings {
+    private convertLongsToStrings: boolean;
+
+    constructor(convertLongsToStrings?: boolean)
+
     getColumnName(propName: string): string;
 
     getPropertyName(columnName: string): string;
@@ -62,6 +66,10 @@ export namespace mapping {
   }
 
   class UnderscoreCqlToPascalCaseMappings implements TableMappings {
+    private convertLongsToStrings: boolean;
+
+    constructor(convertLongsToStrings?: boolean)
+
     getColumnName(propName: string): string;
 
     getPropertyName(columnName: string): string;
