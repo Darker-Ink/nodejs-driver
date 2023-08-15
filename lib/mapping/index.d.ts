@@ -123,6 +123,7 @@ export namespace mapping {
     fields?: string[];
     orderBy?: { [key: string]: string };
     limit?: number;
+    allowFiltering?: boolean;
   }
 
   type InsertDocInfo = {
@@ -178,7 +179,7 @@ export namespace mapping {
     name: string;
     batching: ModelBatchMapper;
 
-    get(doc: Partial<T>, docInfo?: { fields?: string[] }, executionOptions?: string | MappingExecutionOptions): Promise<null | T>;
+    get(doc: Partial<T>, docInfo?: { fields?: string[], allowFiltering?: boolean }, executionOptions?: string | MappingExecutionOptions): Promise<null | T>;
 
     find(doc: Partial<T>, docInfo?: FindDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
