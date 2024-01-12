@@ -18,6 +18,32 @@ import { types } from '../types';
 import { Client } from '../../';
 import Long = types.Long;
 
+type UpperCaseLetters = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
+type lowerCaseLetters = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
+
+type snakeCaseConditions<
+
+  P extends string,
+  S1 extends string,
+  S2 extends string,
+> = S1 extends UpperCaseLetters
+  ? P extends ""
+  ? false : P extends lowerCaseLetters
+  ? true : S2 extends lowerCaseLetters
+  ? true : false
+  : false;
+
+type snakeCase<
+  S extends string,
+  P extends string = ""> = S extends `${infer S1}${infer S2}${infer S3}`
+  ? snakeCaseConditions<P, S1, S2> extends true
+  ? `_${Lowercase<S1>}${snakeCase<`${S2}${S3}`, S1>}`
+  : `${Lowercase<S1>}${snakeCase<`${S2}${S3}`, S1>}`
+  : Lowercase<S>;
+
+
+type getKeys<T> = snakeCase<keyof T>[];
+
 export namespace mapping {
   interface TableMappings {
     getColumnName(propName: string): string;
@@ -50,7 +76,7 @@ export namespace mapping {
   class UnderscoreCqlToCamelCaseMappings implements TableMappings {
     private convertLongsToStrings: boolean;
 
-    constructor(convertLongsToStrings?: boolean)
+    constructor(convertLongsToStrings?: boolean);
 
     getColumnName(propName: string): string;
 
@@ -68,7 +94,7 @@ export namespace mapping {
   class UnderscoreCqlToPascalCaseMappings implements TableMappings {
     private convertLongsToStrings: boolean;
 
-    constructor(convertLongsToStrings?: boolean)
+    constructor(convertLongsToStrings?: boolean);
 
     getColumnName(propName: string): string;
 
@@ -100,7 +126,7 @@ export namespace mapping {
     timestamp?: number | Long;
     fetchSize?: number;
     pageState?: number;
-  }
+  };
 
   interface ModelTables {
     name: string;
@@ -116,46 +142,46 @@ export namespace mapping {
   }
 
   type MappingOptions = {
-    models: { [key: string]: ModelOptions };
-  }
+    models: { [key: string]: ModelOptions; };
+  };
 
-  type FindDocInfo = {
-    fields?: string[];
-    orderBy?: { [key: string]: string };
+  type FindDocInfo<T> = {
+    fields?: getKeys<T>;
+    orderBy?: { [key: string]: string; };
     limit?: number;
     allowFiltering?: boolean;
-  }
+  };
 
-  type InsertDocInfo = {
-    fields?: string[];
+  type InsertDocInfo<T> = {
+    fields?: getKeys<T>;
     ttl?: number;
     ifNotExists?: boolean;
-  }
+  };
 
-  type UpdateDocInfo = {
-    fields?: string[];
+  type UpdateDocInfo<T> = {
+    fields?: getKeys<T>;
     ttl?: number;
     ifExists?: boolean;
-    when?: { [key: string]: any };
-    orderBy?: { [key: string]: string };
+    when?: { [key: string]: any; };
+    orderBy?: { [key: string]: string; };
     limit?: number;
     deleteOnlyColumns?: boolean;
-  }
+  };
 
-  type RemoveDocInfo = {
-    fields?: string[];
+  type RemoveDocInfo<T> = {
+    fields?: getKeys<T>;
     ttl?: number;
     ifExists?: boolean;
-    when?: { [key: string]: any };
+    when?: { [key: string]: any; };
     deleteOnlyColumns?: boolean;
-  }
+  };
 
   type ModelOptions = {
     tables?: string[] | ModelTables[];
     mappings?: TableMappings;
-    columns?: { [key: string]: string|ModelColumnOptions };
+    columns?: { [key: string]: string | ModelColumnOptions; };
     keyspace?: string;
-  }
+  };
 
   type ModelColumnOptions = {
     name: string;
@@ -168,28 +194,28 @@ export namespace mapping {
   }
 
   interface ModelBatchMapper {
-    insert(doc: any, docInfo?: InsertDocInfo): ModelBatchItem;
+    insert(doc: any, docInfo?: InsertDocInfo<T>): ModelBatchItem;
 
-    remove(doc: any, docInfo?: RemoveDocInfo): ModelBatchItem;
+    remove(doc: any, docInfo?: RemoveDocInfo<T>): ModelBatchItem;
 
-    update(doc: any, docInfo?: UpdateDocInfo): ModelBatchItem;
+    update(doc: any, docInfo?: UpdateDocInfo<T>): ModelBatchItem;
   }
 
   interface ModelMapper<T = any> {
     name: string;
     batching: ModelBatchMapper;
 
-    get(doc: Partial<T>, docInfo?: { fields?: string[], allowFiltering?: boolean }, executionOptions?: string | MappingExecutionOptions): Promise<null | T>;
+    get(doc: Partial<T>, docInfo?: { fields?: getKeys<T>, allowFiltering?: boolean; }, executionOptions?: string | MappingExecutionOptions): Promise<null | T>;
 
-    find(doc: Partial<T>, docInfo?: FindDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    find(doc: Partial<T>, docInfo?: FindDocInfo<T>, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
-    findAll(docInfo?: FindDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    findAll(docInfo?: FindDocInfo<T>, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
-    insert(doc: T, docInfo?: InsertDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    insert(doc: T, docInfo?: InsertDocInfo<T>, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
-    update(doc: Partial<T>, docInfo?: UpdateDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    update(doc: Partial<T>, docInfo?: UpdateDocInfo<T>, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
-    remove(doc: Partial<T>, docInfo?: RemoveDocInfo, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
+    remove(doc: Partial<T>, docInfo?: RemoveDocInfo<T>, executionOptions?: string | MappingExecutionOptions): Promise<Result<T>>;
 
     mapWithQuery(
       query: string,

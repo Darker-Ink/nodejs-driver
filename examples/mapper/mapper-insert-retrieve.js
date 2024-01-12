@@ -1,5 +1,5 @@
 "use strict";
-const cassandra = require('cassandra-driver');
+const cassandra = require('../../');
 const Uuid = cassandra.types.Uuid;
 const UnderscoreCqlToCamelCaseMappings = cassandra.mapping.UnderscoreCqlToCamelCaseMappings;
 
